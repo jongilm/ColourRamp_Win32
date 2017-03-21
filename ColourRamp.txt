@@ -1,0 +1,153 @@
+Dear xxx
+
+Thank you for your interest in our Embedded Engineer role. As part of the
+recruitment process we are asking candidates to complete a small coding task in
+order to gauge your coding skills. The task is purposely designed to be basic
+and not slip anyone up, rather test your understanding of the C++ programming
+language and it’s graphical subset.
+
+Could ask you to complete the attached task and reply to this email with your
+final solution?
+
+I look forward to your response.
+
+Best Regards,
+yyy
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Coding Task: Colour Chart
+
+Introduction
+   This is a C++ coding test for potential programmers. It is expected that this
+   task should take a few hours to complete.
+
+Task description
+
+Overview
+   When designing graphics hardware it is useful to be able to display various 
+   test patterns and colour ramps. The task is to write a command-line application
+   to generate some of these test patterns.
+   In the simplest case this program will produce a colour ramp starting with one
+   colour on one side of the screen and changing smoothly to a second colour on the
+   other side.
+   In the most complex case there will be a different colour in each corner of the
+   screen and each pixel on the screen will show the appropriate mix of these four
+   colours.
+
+Input
+   The program should read the following values from the command line:
+   •    Name of display device
+   •    Top Left Colour value
+   •    Top Right Colour value
+   •    Bottom Right Colour value [optional, defaults to Top Right]
+   •    Bottom Left Colour value [optional, defaults to Top Left]
+
+Output
+   The program should fill the screen with a colour ramp as defined by the input
+   values. Each corner of the screen should have the specified colour and the
+   pixels in the middle should be the appropriate linear mix of those colours.
+   Pixels are specified as 16-bit numbers in RGB565 format. The bits for each
+   colour are assigned as follows:
+   
+   Bit     15  14  13  12  11  10  9   8   7   6   5   4   3   2   1   0
+   Colour  R4  R3  R2  R1  R0  G5  G4  G3  G2  G1  G0  B4  B3  B2  B1  B0
+   
+   The image is output on the display device using the Display class which is provided.
+   The get_size method returns the size of the display and the draw_raster method
+   is used to draw a row of pixels on the screen.
+   
+   Assessment
+   The results of this task will be assessed in the following areas:
+   •    Correct operation for all input values
+   •    Clarity and flexibility of design
+   •    Consistent coding style and appropriate use of C++ features
+   •    Appropriate error handling
+   
+   You must provide full source code and a brief description of the input formats.
+   The program will be tested under Visual C++ with a variety of input values.
+   The implementation of the Display class is provided below.
+
+Notes
+   Correct behaviour is much more important than good performance.
+   This is a test program so you can assume an intelligent user who knows what
+   they are doing.
+   This task is harder than it appears: there are a number of pitfalls and
+   difficult cases to allow for. In particular, make sure that the colours are
+   spread evenly when there are only a few different colours across the screen.
+   Feel free to contact us if anything is unclear or if you would like further
+   guidance.
+
+Display Class implementation
+
+   Header file
+      class Display
+      {
+         public:
+            Display();
+        
+            bool connect(const char *display_name);
+            void get_size(int &width, int &height);
+            void draw_raster(int x, int y, const unsigned short *pixels, int width);
+      };
+   
+   Implementation file
+      #include <cstdio>
+      #include <cassert>
+      #include <memory.h>
+      
+      #include "display.h"
+      
+      #define W 16
+      #define H  9
+      
+      static unsigned short frame_buffer[W*H];
+      
+      Display::Display()
+      {
+        memset(frame_buffer, 0, sizeof(frame_buffer));
+      }
+      
+      Display::~Display()
+      {
+         unsigned short *pix = frame_buffer;
+         for (int y = 0; y < H; y++)
+         {
+            for (int x = 0; x < W; x++)
+            {
+               if (x > 0)
+               {
+                  printf(" ");
+               }
+               printf("%04X", *pix++);
+            }
+            printf("\n");
+         }
+      }
+      
+      bool Display::connect(const char *display_name)
+      {
+         return true;
+      }
+      
+      void Display::get_size(int &width, int &height)
+      {
+         width = W;
+         height = H;
+      }
+      
+      void Display::draw_raster(int x, int y, const unsigned short *pixels, int width)
+      {
+         memcpy(&frame_buffer[y*W+x], pixels, width*sizeof(unsigned short));
+      }
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// JGilmore (13/11/2011 18:23) 
+Aaaargh - I've been trying to debug my code all day.
+Why does my generated BMP file look wrong?
+
+Eventually, I downloaded a viewer that claims to support BMP565.
+And it looks fine.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
